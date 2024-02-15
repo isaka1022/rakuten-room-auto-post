@@ -14,7 +14,8 @@ import postRakutenRoom from "./src/postRakutenRoom";
 async function runJob() {
   const today = new Date();
   const currentHour = today.getHours();
-  const targetGenres = getGenreIdsByTime(currentHour);
+  // NOTE: JSTに揃える
+  const targetGenres = getGenreIdsByTime(currentHour + 9);
   if (targetGenres.length === 0) {
     console.log("対象ジャンルなし");
     return;
