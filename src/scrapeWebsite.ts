@@ -11,7 +11,8 @@ const scrapeWebsite = async (
   const userId = process.env.USER_ID || "";
   const password = process.env.USER_PASSWORD || "";
 
-  const browser = await puppeteer.launch({ headless: "new" });
+  const launchOptions = process.env.DYNO ? { args: ['--no-sandbox', '--disable-setuid-sandbox'] } : { headless: true };
+  const browser = await puppeteer.launch(launchOptions);
   const page = await browser.newPage();
   await page.setUserAgent(
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
