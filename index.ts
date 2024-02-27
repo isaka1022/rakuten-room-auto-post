@@ -16,16 +16,13 @@ async function runJob() {
   const today = new Date();
   const currentHour = today.getHours();
   // NOTE: JSTに揃える
-  // const targetGenres = getGenreIdsByTime(currentHour);
-  const targetGenres = ["100804"];
-  if (targetGenres.length === 0) {
+  const genreId = process.env.GENRE_ID || "";
+  if (genreId === "") {
     console.log("対象ジャンルなし");
     return;
   }
-
-  for (const genreId of targetGenres) {
-    main(getRakutenRankingDataByGenre, genreId);
-  }
+  
+  main(getRakutenRankingDataByGenre, genreId);
   console.log("End job:" + new Date().toLocaleString());
 }
 
@@ -36,7 +33,6 @@ async function main(
   const numberToday = getNumberToday();
   const elements = await getRakutenRankingData(genreOrKeyword, numberToday);
   await postRakutenRoom(elements);
-  console.log("End job:" + new Date().toLocaleString());
 }
 
 const args = process.argv.slice(2);
@@ -47,10 +43,9 @@ if (options.genre) {
   main(getRakutenRankingDataByKeyword, options.keyword);
 } else {
   const job = new CronJob("0 0 11,12,13,14,15,16,17,18,19,20 * * *", () => {
-    
     runJob();
   });
-  job.start();
+  // job.start();
   console.log("Start job:" + new Date().toLocaleString());
   runJob();
   // favoritePosts();
