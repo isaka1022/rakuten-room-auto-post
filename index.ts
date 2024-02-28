@@ -25,10 +25,13 @@ async function runJob() {
     return;
   }
 
-  genreIds.forEach((genreId, index) => {
+  let index = 0;
+  for (const genreId of genreIds) {
     main(getRakutenRankingDataByGenre, genreId, userIds[index], passwords[index]);
+    await new Promise((resolve) => setTimeout(resolve, 3000));
     console.log("End job:" + new Date().toLocaleString());
-  })
+    index++;
+  }
 };
 
 
