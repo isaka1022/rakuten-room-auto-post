@@ -16,37 +16,35 @@ async function runJob() {
   const today = new Date();
   const currentHour = today.getHours();
   // NOTE: JSTに揃える
-  const genreId = process.env.GENRE_ID || "";
-  if (genreId === "") {
-    console.log("対象ジャンルなし");
+  const genreIds = process.env.GENRE_IDS?.split(',') || [];
+  const userIds = process.env.USER_IDS?.split(',') || [];
+  const passwords = process.env.USER_PASSWORDS?.split(',') || [];
+  
+  if (genreIds.length !== userIds.length || userIds.length !== passwords.length) {
+    console.log("Wrong env vars");
     return;
   }
-  
-  main(getRakutenRankingDataByGenre, genreId);
-  console.log("End job:" + new Date().toLocaleString());
-}
+
+  genreIds.forEach((genreId, index) => {
+    main(getRakutenRankingDataByGenre, genreId, userIds[index], passwords[index]);
+    console.log("End job:" + new Date().toLocaleString());
+  })
+};
+
 
 async function main(
   getRakutenRankingData: (genreOrKeyword: string, numberToday: number) => any,
-  genreOrKeyword: string
+  genreOrKeyword: string,
+  userId: string,
+  password: string
 ) {
   const numberToday = getNumberToday();
   const elements = await getRakutenRankingData(genreOrKeyword, numberToday);
-  await postRakutenRoom(elements);
+
+
+  await postRakutenRoom(elements, userId, password);
 }
 
-const args = process.argv.slice(2);
-const options = parseCommandLineArgs(args);
-if (options.genre) {
-  main(getRakutenRankingDataByGenre, options.genre);
-} else if (options.keyword) {
-  main(getRakutenRankingDataByKeyword, options.keyword);
-} else {
-  const job = new CronJob("0 0 11,12,13,14,15,16,17,18,19,20 * * *", () => {
-    runJob();
-  });
-  // job.start();
-  console.log("Start job:" + new Date().toLocaleString());
-  runJob();
-  // favoritePosts();
-}
+
+console.log("Start job:" + new Date().toLocaleString());
+runJob();

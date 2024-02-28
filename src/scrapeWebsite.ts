@@ -4,12 +4,11 @@ import { generateProductDescription } from "./generateProductDescription";
 const scrapeWebsite = async (
   url: string,
   catchcopy: string,
-  itemName: string
+  itemName: string,
+  userId: string,
+  password: string
 ) => {
   console.log("1:" + new Date().toLocaleString());
-
-  const userId = process.env.USER_ID || "";
-  const password = process.env.USER_PASSWORD || "";
 
   const browser = await puppeteer.launch({
     'args' : [
