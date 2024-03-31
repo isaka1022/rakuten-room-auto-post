@@ -8,7 +8,8 @@ const getNumberFromDayOfYear = (dayOfYear: number) => {
   return number;
 };
 
-const getNumberToday = () => {
+
+export const getNumberToday = () => {
   const today = new Date();
   const dayOfYearToday = getDayOfYear(today);
   const numberToday = getNumberFromDayOfYear(dayOfYearToday);
@@ -16,4 +17,8 @@ const getNumberToday = () => {
   return numberToday;
 };
 
-export default getNumberToday;
+export const getCurrentHour = () => {
+  const today = new Date();
+  const currentHour = today.getHours();
+  return currentHour;
+}

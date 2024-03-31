@@ -15,7 +15,8 @@ const scrapeWebsite = async (
     'args' : [
       '--no-sandbox',
       '--disable-setuid-sandbox'
-    ]
+    ],
+    headless: 'new',
   });
   const page = await browser.newPage();
   await page.setUserAgent(
