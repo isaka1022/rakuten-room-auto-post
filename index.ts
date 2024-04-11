@@ -32,6 +32,7 @@ async function main(
   const numberHour = getCurrentHour();
   const elements = await getRakutenRankingData(genreOrKeyword, numberHour);
   await postRakutenRoom(elements);
+  return 0;
 }
 
 const genreId = process.env.GENRE_ID || "";
